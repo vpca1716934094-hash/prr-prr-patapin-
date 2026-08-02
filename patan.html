@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Feliz Cumpleaños, Mi bro! 🎉</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.85);
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.4);
+      --gold: #f59e0b;
+      --text: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      background-image: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 80%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    #fase-vela {
+      text-align: center;
+      max-width: 500px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .title-vela {
+      font-size: 2.3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #3b82f6, #60a5fa, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .subtitle-vela {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      margin-bottom: 40px;
+    }
+
+    .cake-container {
+      position: relative;
+      width: 150px;
+      height: 120px;
+      margin: 0 auto 30px auto;
+      cursor: pointer;
+    }
+
+    .cake-body {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(to right, #1d4ed8, #3b82f6);
+      border-radius: 15px 15px 10px 10px;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .cake-topping {
+      position: absolute;
+      top: 35px;
+      width: 100%;
+      height: 15px;
+      background: #fff;
+      border-radius: 10px;
+    }
+
+    .candle {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 35px;
+      background: repeating-linear-gradient(45deg, #f59e0b, #f59e0b 5px, #fff 5px, #fff 10px);
+      border-radius: 4px;
+    }
+
+    .flame {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 22px;
+      background: #ff9100;
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 20px #ff9100, 0 0 30px #ffea00;
+      animation: flicker 0.2s infinite alternate;
+      transition: all 0.5s ease;
+    }
+
+    .flame-off {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px) scale(0);
+    }
+
+    #fase-sobre {
+      display: none;
+      text-align: center;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      margin: 30px auto;
+      background-color: #1d4ed8;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--accent-glow);
+      cursor: pointer;
+      animation: float 3.5s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-wrapper:hover {
+      transform: scale(1.04);
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 120px solid #1e40af;
+      transform-origin: top;
+      transition: transform 0.6s ease, z-index 0.6s;
+      z-index: 3;
+    }
+
+    .envelope-pocket {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid #3b82f6;
+      border-right: 160px solid #3b82f6;
+      border-bottom: 110px solid #2563eb;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      z-index: 2;
+    }
+
+    .envelope-seal {
+      position: absolute;
+      top: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 50px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      z-index: 4;
+    }
+
+    #fase-carta {
+      display: none;
+      max-width: 800px;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
+      padding: 45px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+      animation: openLetter 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .music-player {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 15px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 35px;
+    }
+
+    .music-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .music-icon {
+      font-size: 1.5rem;
+      animation: spin 4s linear infinite;
+    }
+
+    .play-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .carta-header {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 20px;
+    }
+
+    .carta-header h2 {
+      font-size: 2.2rem;
+      color: #60a5fa;
+    }
+
+    .carta-contenido {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: #e2e8f0;
+      margin-bottom: 40px;
+      white-space: pre-line;
+    }
+
+    .polaroid-grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .polaroid {
+      background: white;
+      padding: 12px 12px 25px 12px;
+      border-radius: 8px;
+      box-shadow: 0 15px 25px rgba(0,0,0,0.4);
+      transform: rotate(-3deg);
+      transition: all 0.3s ease;
+      max-width: 220px;
+      cursor: pointer;
+    }
+
+    .polaroid:nth-child(even) {
+      transform: rotate(3deg);
+    }
+
+    .polaroid:hover {
+      transform: scale(1.08) rotate(0deg);
+      z-index: 10;
+    }
+
+    .polaroid img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .polaroid-caption {
+      color: #0f172a;
+      font-weight: bold;
+      font-size: 1rem;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.15); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-16px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes openLetter {
+      from { opacity: 0; transform: scale(0.85) translateY(40px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      z-index: 999;
+      animation: fall 3.5s linear infinite;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(105vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- REPRODUCTOR DE AUDIO -->
+  <audio id="bg-music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- FASE 1: SOPLAR LA VELA -->
+  <div id="fase-vela">
+    <h1 class="title-vela">¡Feliz Cumpleaños, Mi Hermano! 🎂</h1>
+    <p class="subtitle-vela">Toca la vela para apagar la llama y empezar la celebración...</p>
+    
+    <div class="cake-container" onclick="apagarVela()">
+      <div class="candle">
+        <div class="flame" id="flame"></div>
+      </div>
+      <div class="cake-body">
+        <div class="cake-topping"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 2: EL SOBRE -->
+  <div id="fase-sobre">
+    <h2 style="color: #f8fafc; font-weight: 400; margin-bottom: 10px;">Llegó un mensaje importante para ti ✉️</h2>
+    <p style="color: #94a3b8; margin-bottom: 20px;">Toca el sello para abrir la carta</p>
+    
+    <div class="envelope-wrapper" onclick="abrirCarta()">
+      <div class="envelope-flap" id="flap"></div>
+      <div class="envelope-seal">👑</div>
+      <div class="envelope-pocket"></div>
+    </div>
+  </div>
+
+  <!-- FASE 3: CARTA -->
+  <div id="fase-carta">
+
+    <div class="music-player">
+      <div class="music-info">
+        <span class="music-icon">🎵</span>
+        <div>
+          <div style="font-size: 0.95rem; font-weight: bold;">BRR BRR PATAPIM FUNK 🔥</div>
+          <div style="font-size: 0.8rem; color: #94a3b8;">SXYGX x Scythermane</div>
+        </div>
+      </div>
+      <button class="play-btn" id="music-control" onclick="toggleMúsica()">⏸️ Pausar</button>
+    </div>
+
+    <div class="carta-header">
+      <h2>🎉 ¡Feliz Cumpleaños, Hermano! 🎈</h2>
+    </div>
+
+    <div class="carta-contenido">
+
+Hoy en tu cumpleaños quería hacer algo diferente y enviarte este detalle rápido. 
+
+Primero que nada, agradecer por la lealtad, las risas, las anécdotas y todas las vivencias que hemos compartido. Tener compas verdaderos en los que uno pueda confiar no se encuentra todos los días, y por eso se valora un montón tu amistad.
+
+Espero que este nuevo año de vida venga cargado de puros éxitos, metas cumplidas, buena salud y sobre todo momentos épicos. Sigue firme con tus proyectos y nunca le bajes al ritmo.
+
+Disfruta de tu día al máximo con la gente que te aprecia. ¡A celebrar a lo grande!
+
+¡Un fuerte abrazo, crack!
+
+Atentamente,
+César. 👊🔥
+    </div>
+
+    <h3 style="text-align: center; color: #60a5fa; margin-bottom: 15px;">📸</h3>
+    <div class="polaroid-grid">
+         </div>
+
+  </div>
+
+  <script>
+    const music = document.getElementById('bg-music');
+
+    function apagarVela() {
+      document.getElementById('flame').classList.add('flame-off');
+      lanzarConfeti();
+
+      music.play().catch(() => console.log("Se requiere interacción previa o archivo de audio válido"));
+
+      setTimeout(() => {
+        document.getElementById('fase-vela').style.display = 'none';
+        document.getElementById('fase-sobre').style.display = 'block';
+      }, 1500);
+    }
+
+    function abrirCarta() {
+      const flap = document.getElementById('flap');
+      flap.style.transform = 'rotateX(180deg)';
+      flap.style.zIndex = '1';
+
+      setTimeout(() => {
+        document.getElementById('fase-sobre').style.display = 'none';
+        document.getElementById('fase-carta').style.display = 'block';
+        lanzarConfeti();
+      }, 800);
+    }
+
+    function toggleMúsica() {
+      const btn = document.getElementById('music-control');
+      if (music.paused) {
+        music.play();
+        btn.innerText = '⏸️ Pausar';
+      } else {
+        music.pause();
+        btn.innerText = '▶️ Reproducir';
+      }
+    }
+
+    function lanzarConfeti() {
+      const colores = ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899'];
+      for (let i = 0; i < 70; i++) {
+        const confeti = document.createElement('div');
+        confeti.classList.add('confetti');
+        confeti.style.left = Math.random() * 100 + 'vw';
+        confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+        confeti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        confeti.style.opacity = Math.random();
+        document.body.appendChild(confeti);
+
+        setTimeout(() => confeti.remove(), 4000);
+      }
+    }
+  </script>
+</body>
+</html>
